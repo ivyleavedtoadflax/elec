@@ -25,7 +25,7 @@ def main(wait):
 			print "======================== PULSE " + str(counter)
 			total += 1
 			#return(total)
-			pulse=open("/home/pi/read_led/pulse.dat","w")
+			pulse=open("/home/pi/elec/pulse.dat","w")
 			pulse.write(strftime("%H:%M:%S") + "," + str(1))
 			pulse.close()
 		else:
