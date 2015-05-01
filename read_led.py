@@ -40,7 +40,7 @@ def ledFlash(i,j):
 		ledCount +=1
 
 def write_log_csv(ts,day,night,val):
-        log = open("/home/pi/read_led/Log.csv", "a")
+        log = open("/home/pi/elec/Log.csv", "a")
 	log.write("\n" + str(ts) + "," + str(day) + "," + str(night) + "," + str(val))
 	log.close()	
 
@@ -57,7 +57,7 @@ def write_log_psql(ts,day,night,val):
 
 def main():
 
-        initial = open("/home/pi/read_led/initial.vals","r")
+        initial = open("/home/pi/elec/initial.vals","r")
         day = float(initial.readline())
         night = float(initial.readline())
         initial.close()
@@ -86,7 +86,7 @@ def main():
 		except:
 			pass
 	
-        	initial = open("/home/pi/read_led/initial.vals","w")
+        	initial = open("/home/pi/elec/initial.vals","w")
         	initial.write(str(day) + "\n" + str(night))
         	initial.close()
 
