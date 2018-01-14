@@ -7,6 +7,14 @@ This repository contains code for setting up a raspberry pi pulse counter for re
 Currently this has only been tested on ~~[Raspbian Wheezy 2015-05-05](https://www.raspberrypi.org/downloads/raspbian/)~~ [Raspbian Jessie 2015-09-24](https://www.raspberrypi.org/downloads/raspbian/) installed from the img, not using NOOBS.
 Note that in future it would be preferable for this to built upon [MINIBIAN](https://minibianpi.wordpress.com/) or similar, to keep setup time to a minimum, as the code requires very little to run.
 
+## Environment Variables
+
+The following env vars need to be set on the raspberry pi
+
+|Variable|Definition|
+|---|---|
+|LOG_FILE|File path for pulse data log file|
+
 ## Circuit for pulse counting
 
 The pulse counting circuit is built using a light dependent resistor.

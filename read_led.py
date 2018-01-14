@@ -2,10 +2,10 @@
 Read a blinking LED and log
 '''
 
-#!/usr/bin/python
+#!/usr/bin/env python
 
+import os
 from time import strftime, sleep, time
-#from socket import gethostname
 import RPi.GPIO as GPIO
 
 ######################### Setup GPIO PINS #########################
@@ -19,6 +19,7 @@ GPIO.setwarnings(False)
 
 LDR_PIN = 17    # LDR (light dependent resistor)
 LED_PIN = 0     # LED (light emitting diode)
+LOG_FILE = os.environ.get('LOG_FILE')
 
 GPIO.setup(LDR_PIN, GPIO.IN)
 
@@ -65,7 +66,7 @@ def led_flash(led_pin, n_flashes=2, interval=0.3):
         sleep(interval)
         count += 1
 
-def write_log_csv(timestamp, value, log_file='/home/pi/elec/elec_log.csv'):
+def write_log_csv(timestamp, value, log_file=LOG_FILE):
     '''
     Write log data to csv
 
