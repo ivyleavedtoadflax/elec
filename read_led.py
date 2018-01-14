@@ -19,7 +19,8 @@ GPIO.setwarnings(False)
 
 LDR_PIN = 17    # LDR (light dependent resistor)
 LED_PIN = 0     # LED (light emitting diode)
-LOG_FILE = os.environ.get('LOG_FILE')
+#LOG_FILE = os.environ.get('LOG_FILE')
+LOG_FILE = os.path('/home/pi/elec/elec_log.csv')
 
 GPIO.setup(LDR_PIN, GPIO.IN)
 
