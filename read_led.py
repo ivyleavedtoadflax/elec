@@ -65,13 +65,17 @@ def ledFlash(LED_PIN, n_flashes=2, interval=0.3):
         sleep(interval)
         led_count += 1
 
-def write_log_csv(ts, val):
+def write_log_csv(timestamp, value, log_file='/home/pi/elec/elec_log.csv'):
     '''
     Write log data to csv
+
+    :param timestamp: <str> Timestamp
+    :param value: <int> Value (count of flashes)
+    :param log_file: <str> Location of log file
     '''
 
-    log = open("/home/pi/elec/Log.csv", "a")
-    log.write("\n" + str(ts) + "," + str(val))
+    log = open(log_file, "a")
+    log.write("\n" + str(timestamp) + "," + str(value))
     log.close()
 
 def main(interval=60):
