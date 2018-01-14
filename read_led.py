@@ -24,7 +24,7 @@ GPIO.setup(LDR_PIN, GPIO.IN)
 
 # Define functions
 
-def get_light(LDR_PIN, duration=0.03):
+def get_light(ldr_pin, duration=0.03):
     '''
     Read from the GPIO pin then sleep
 
@@ -33,7 +33,7 @@ def get_light(LDR_PIN, duration=0.03):
     :return: <boolean>
     '''
 
-    input_value = GPIO.input(LDR_PIN)
+    input_value = GPIO.input(ldr_pin)
 
     # Duration value can be experimented with
     # but 0.03 seems to be reasonable
@@ -48,7 +48,7 @@ def get_light(LDR_PIN, duration=0.03):
 # Run data recording LED init sequence
 # This is not currently used in this version
 
-def ledFlash(LED_PIN, n_flashes=2, interval=0.3):
+def led_flash(led_pin, n_flashes=2, interval=0.3):
     '''
     Flash an indicator LED
 
@@ -59,11 +59,11 @@ def ledFlash(LED_PIN, n_flashes=2, interval=0.3):
 
     count = 0
     while count < n_flashes:
-        GPIO.output(LED_PIN, GPIO.HIGH)
+        GPIO.output(led_pin, GPIO.HIGH)
         sleep(interval)
-        GPIO.output(LED_PIN, GPIO.LOW)
+        GPIO.output(led_pin, GPIO.LOW)
         sleep(interval)
-        led_count += 1
+        count += 1
 
 def write_log_csv(timestamp, value, log_file='/home/pi/elec/elec_log.csv'):
     '''
