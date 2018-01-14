@@ -29,7 +29,7 @@ def get_light(ldr_pin, duration=0.03):
     '''
     Read from the GPIO pin then sleep
 
-    :param LDR_PIN: <int> Address of GPIO pin connected to light dependent resistor
+    :param ldr_pin: <int> Address of GPIO pin connected to light dependent resistor
     :param duration: <float> Duration in seconds that the rpi will sleep beyween measurements
     :return: <boolean>
     '''
