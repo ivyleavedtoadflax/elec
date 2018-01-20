@@ -27,7 +27,7 @@ def main(WAIT):
         input_value = GPIO.input(17)
         if input_value == 0:
             counter += 1
-            print "======================== PULSE " + str(counter)
+            print("======================== PULSE " + str(counter))
             total += 1
 	    #return(total)
             pulse = open("/home/pi/elec/pulse.dat", "w")
