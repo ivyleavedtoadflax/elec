@@ -38,7 +38,13 @@ Setting environmental variables. The following env vars need to be set on the ra
 
 |Variable|Definition|
 |---|---|
-|LOG_FILE|File path for pulse data log file|
+|ELEC_LOG|File path for pulse data log file|
+|ELEC_INTERVAL|Interval over which electricity measurements are taken|
+|MQTT_HOST|MQTT broker hostname|
+|MQTT_PORT|MQTT broker port|
+|MQTT_USERNAME|MQTT account username|
+|MQTT_PASSWORD|MQTT account password|
+|MQTT_TOPIC|MQTT topic on which to publish|
 
 ### Running the script automatically
 
