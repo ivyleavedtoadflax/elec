@@ -2,9 +2,6 @@
 Read a blinking LED and log
 '''
 
-# TODO SSL
-# TODO SECURE PI
-
 #!/usr/bin/env python
 
 import os
@@ -129,7 +126,7 @@ def main(interval=ELEC_INTERVAL):
             single(
                 topic=MQTT_TOPIC, payload=sensor_data, qos=1,
                 hostname=MQTT_HOST, port=MQTT_PORT,
-                auth={'username': MQTT_USERNAME,'password': MQTT_PASSWORD}
+                auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
                 )
 
         except Exception:
@@ -139,5 +136,4 @@ if __name__ == '__main__':
     main()
 
 GPIO.cleanup()
-
 
