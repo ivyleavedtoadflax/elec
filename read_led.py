@@ -4,7 +4,6 @@ Read a blinking LED and log
 
 # TODO SSL
 # TODO SECURE PI
-# TODO NEW MQTT ROUTER
 
 #!/usr/bin/env python
 
@@ -24,8 +23,6 @@ GPIO.setwarnings(False)
 
 LDR_PIN = 17    # LDR (light dependent resistor)
 LED_PIN = 0     # LED (light emitting diode)
-#LOG_FILE = os.environ.get('LOG_FILE')
-LOG_FILE = '/home/pi/elec/elec_log.csv'
 
 GPIO.setup(LDR_PIN, GPIO.IN)
 
@@ -37,8 +34,9 @@ MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
 MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD')
 MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
+ELEC_LOG = os.environ.get('ELEC_LOG')
 
-# Define functions
+#Define functions
 
 def get_light(ldr_pin, duration=0.03):
     '''
@@ -81,7 +79,7 @@ def led_flash(led_pin, n_flashes=2, interval=0.3):
         sleep(interval)
         count += 1
 
-def write_log_csv(timestamp, value, log_file=LOG_FILE):
+def write_log_csv(timestamp, value, log_file=ELEC_LOG):
     '''
     Write log data to csv
 
