@@ -5,6 +5,7 @@ Read a blinking LED and log
 #!/usr/bin/env python
 
 import os
+import json
 from time import strftime, sleep, time
 import RPi.GPIO as GPIO
 from paho.mqtt.publish import single
@@ -111,10 +112,12 @@ def main(interval=ELEC_INTERVAL):
 
         timestamp = strftime("%Y-%m-%d %H:%M:%S")
 
-        sensor_data = str({
+        sensor_data = {
             "Time" : timestamp,
             "Pulses" : counter
-        })
+        }
+
+        sensor_data = json.dumps(sensor_data)
     # Try to log to csv
 
         try:
