@@ -34,7 +34,7 @@ MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
 ELEC_LOG = os.environ.get('ELEC_LOG')
 
-#Define functions
+# Define functions
 
 def get_light(ldr_pin, duration=0.03):
     '''
