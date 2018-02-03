@@ -2,39 +2,18 @@
 
 This repository contains code for setting up a raspberry pi pulse counter for reading led pulses from an electricity meter.
 
-## Instructions for set up
+Since 2.0.0 this software is provided as a docker container intended to be run on a raspberry pi.
 
-Currently this has only been tested on ~~[Raspbian Wheezy 2015-05-05](https://www.raspberrypi.org/downloads/raspbian/)~~ [Raspbian Jessie 2015-09-24](https://www.raspberrypi.org/downloads/raspbian/) installed from the img, not using NOOBS.
+Installing Docker on the Raspberry Pi is very simple, simply run:
 
+## Requirements
 
-## Instructions for setup
+* A raspberry pi with an up to date version of raspbian
+* Docker (install with `curl -sSL https://get.docker.com | sh`)
 
-### Connecting to WiFi
+## Building the docker container
 
-* Install raspbian-wheezy 2015-05-05
-   * Follow the instructions [here]([Rasbian Wheezy 2015-05-05](https://www.raspberrypi.org/downloads/raspbian/))
-* Establish headless wifi connection with pi
-   * make sure SSH is enabled
-   * because I don't like to connect my pis to monitors (it's a bit of a pain), I pre-install the /etc/wpa_supplicant/wpa_supplicant.cong file on the SD card with the settings from my wifi router. Then i can get online headlessly without trouble. The settings for my wifi network are as follows, yous may be similar:
-
-```
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-
-network={
-   ssid="my-base-station-ssid"
-   psk="my-password"
-   proto=RSN
-   key_mgmt=WPA-PSK
-   pairwise=CCMP
-   auth_alg=OPEN
-}
-
-```
-### Environment Variables
-
-Setting environmental variables. The following env vars need to be set on the raspberry pi.
-*Note that in v1.1.0 these is not implemented, and indtead these values are hardcoded. This is because the pi was failing to find the environment vars at logon, despite being placed in the `/etc/profile` file.*
-
+The following environment variables should first be set on the raspberry pi before building the container:
 
 |Variable|Definition|
 |---|---|
@@ -46,14 +25,25 @@ Setting environmental variables. The following env vars need to be set on the ra
 |MQTT_PASSWORD|MQTT account password|
 |MQTT_TOPIC|MQTT topic on which to publish|
 
-### Running the script automatically
+It's a good idea to install direnv to handle your environment variables before building (otherwise you can store the env vars in ~/.profile). Install direnv with:
 
-* Add the following lines to crontab with crontab -e.
-* Starts python pulse logging script on reboot.
+```{bash}
+sudo apt-get install direnv
+echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
+```
 
-```
-@reboot sudo python ~/elec/read_led.py
-```
+The image can then be built with `make build_new`.
+
+## Restarting the container at startup
+
+To launch the container use the `make run` command. This will persist the container between startups, by setting the `--restart unless stopped` argument.
+
+## Testing
+
+The makefile has some simple commands for testing and launching independent of crontab:
+
+* `test` : Tests that the python3 endpoint is running by printing to console.
+* `run`  : Runs a pulse logging container.
 
 ## Circuit for pulse counting
 

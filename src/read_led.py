@@ -34,7 +34,18 @@ MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
 ELEC_LOG = os.environ.get('ELEC_LOG')
 
-#Define functions
+# Print environment vars
+
+print("*********** ENV VARS ***********")
+print("MQTT_HOST:", MQTT_HOST)
+print("MQTT_PORT:", MQTT_PORT)
+print("MQTT_USERNAME:", MQTT_USERNAME)
+print("MQTT_PASSWORD:", "*****", MQTT_PASSWORD[5:], sep='')
+print("MQTT_TOPIC:", MQTT_TOPIC)
+print("ELEC_INTERVAL:", ELEC_INTERVAL)
+print("ELEC_LOG:", ELEC_LOG)
+
+# Define functions
 
 def get_light(ldr_pin, duration=0.03):
     '''
@@ -91,7 +102,6 @@ def write_log_csv(timestamp, value, log_file=ELEC_LOG):
     log.close()
 
 def main(interval=ELEC_INTERVAL):
-
 
     '''
     Run the counter
