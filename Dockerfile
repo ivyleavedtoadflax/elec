@@ -4,7 +4,7 @@ FROM resin/rpi-raspbian:latest
 
 MAINTAINER Matthew Upson
 LABEL date="2018-02-03"
-LABEL version="0.1.0"
+LABEL version="2.0.0"
 LABEL description="Measure electricity usage with a raspberry pi"
 
 # Prepare for using gpio
