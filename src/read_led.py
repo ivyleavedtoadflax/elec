@@ -31,8 +31,15 @@ MQTT_PORT = int(os.environ.get('MQTT_PORT'))
 MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
 MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD')
 MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
+MQTT_QOS = int(os.environ.get('MQTT_QOS'))
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
 ELEC_LOG = os.environ.get('ELEC_LOG')
+ECONOMY7 = int(os.environ.get('ECONOMY7'))
+DAY_START = strftime(os.environ.get('DAY_START'))
+NIGHT_START = strftime(os.environ.get('NIGHT_START'))
+PULSE_UNIT = float(os.environ.get('PULSE_UNIT'))
+DAY_RATE = float(os.environ.get('DAY_RATE'))
+NIGHT_RATE = float(os.environ.get('NIGHT_RATE'))
 
 # Print environment vars
 
@@ -40,10 +47,17 @@ print("*********** ENV VARS ***********")
 print("MQTT_HOST:", MQTT_HOST)
 print("MQTT_PORT:", MQTT_PORT)
 print("MQTT_USERNAME:", MQTT_USERNAME)
-print("MQTT_PASSWORD:", "*****", MQTT_PASSWORD[5:], sep='')
+print("MQTT_PASSWORD:", " *****", MQTT_PASSWORD[5:], sep="")
 print("MQTT_TOPIC:", MQTT_TOPIC)
+print("MQTT_QOS:", MQTT_QOS)
 print("ELEC_INTERVAL:", ELEC_INTERVAL)
 print("ELEC_LOG:", ELEC_LOG)
+print("ECONOMY7:", ECONOMY7)
+print("DAY_START:", DAY_START)
+print("NIGHT_START:", NIGHT_START)
+print("PULSE_UNIT:", PULSE_UNIT)
+print("DAY_RATE:", DAY_RATE)
+print("NIGHT_RATE:", NIGHT_RATE)
 
 # Define functions
 
@@ -114,36 +128,56 @@ def main(interval=ELEC_INTERVAL):
     while True:
         timeout = time() + interval
 
-    # Initiliase accumulator at zero
-    # Then run get_light and add to accumulator
+        # Initiliase accumulator at zero
+        # Then run get_light and add to accumulator
+
         counter = 0
         while timeout > time():
             counter += get_light(LDR_PIN)
 
         timestamp = strftime("%Y-%m-%d %H:%M:%S")
+        hour = strftime("%H:%M")
+        night = 0
+
+        if ECONOMY7:
+            if hour > NIGHT_START or hour < DAY_START:
+                night = 1
+
+        rate = ((night * NIGHT_RATE) + ((1 - night) * DAY_RATE))
+        cost = counter * PULSE_UNIT * rate
+        cost = round(cost, 5)
 
         sensor_data = {
             "Time" : timestamp,
-            "Pulses" : counter
+            "Pulses" : counter,
+            "Night" : night,
+            "Cost" : cost
         }
 
         sensor_data = json.dumps(sensor_data)
-    # Try to log to csv
+
+        # Try to log to csv
 
         try:
             write_log_csv(timestamp, counter)
-        except Exception:
+        except Exception as e:
+            print("Failed to log data to csv file")
+            print(e)
             pass
+
+        # Try to log to MQTT
 
         try:
             single(
-                topic=MQTT_TOPIC, payload=sensor_data, qos=1,
+                topic=MQTT_TOPIC, payload=sensor_data, qos=MQTT_QOS,
                 hostname=MQTT_HOST, port=MQTT_PORT,
                 auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
                 )
 
-        except Exception:
+        except Exception as e:
             print('Failed to send message to MQTT broker')
+            print(e)
+            pass
 
 if __name__ == '__main__':
     main()
