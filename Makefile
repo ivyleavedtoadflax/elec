@@ -1,5 +1,5 @@
 
-build:
+build: Dockerfile src/read_led.py src/requirements.txt
 	sudo -E docker build \
 	--build-arg MQTT_PORT=${MQTT_PORT} \
 	--build-arg MQTT_HOST=${MQTT_HOST} \
@@ -13,7 +13,7 @@ build:
 	--build-arg NIGHT_START=${NIGHT_START} \
 	-t elec:latest .
 
-build_new:
+build_new: Dockerfile src/read_led.py src/requirements.txt
 	sudo -E docker build \
 	--build-arg MQTT_PORT=${MQTT_PORT} \
 	--build-arg MQTT_HOST=${MQTT_HOST} \
