@@ -31,11 +31,12 @@ MQTT_PORT = int(os.environ.get('MQTT_PORT'))
 MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
 MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD')
 MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
+MQTT_QOS = int(os.environ.get('MQTT_QOS'))
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
 ELEC_LOG = os.environ.get('ELEC_LOG')
 ECONOMY7 = bool(os.environ.get('ECONOMY7'))
-DAY_START = int(os.environ.get('DAY_START'))
-NIGHT_START = int(os.environ.get('NIGHT_START'))
+DAY_START = strftime(os.environ.get('DAY_START'))
+NIGHT_START = strftime(os.environ.get('NIGHT_START'))
 
 # Print environment vars
 
@@ -45,6 +46,7 @@ print("MQTT_PORT:", MQTT_PORT)
 print("MQTT_USERNAME:", MQTT_USERNAME)
 print("MQTT_PASSWORD:", " *****", MQTT_PASSWORD[5:], sep="")
 print("MQTT_TOPIC:", MQTT_TOPIC)
+print("MQTT_QOS:", MQTT_QOS)
 print("ELEC_INTERVAL:", ELEC_INTERVAL)
 print("ELEC_LOG:", ELEC_LOG)
 print("ECONOMY7:", ECONOMY7)
@@ -120,14 +122,15 @@ def main(interval=ELEC_INTERVAL):
     while True:
         timeout = time() + interval
 
-    # Initiliase accumulator at zero
-    # Then run get_light and add to accumulator
+        # Initiliase accumulator at zero
+        # Then run get_light and add to accumulator
+        
         counter = 0
         while timeout > time():
             counter += get_light(LDR_PIN)
 
         timestamp = strftime("%Y-%m-%d %H:%M:%S")
-        hour = int(strftime("%H"))
+        time = strftime("%H:%M")
         NIGHT = 0
 
         if ECONOMY7:
@@ -141,16 +144,19 @@ def main(interval=ELEC_INTERVAL):
         }
 
         sensor_data = json.dumps(sensor_data)
-    # Try to log to csv
+    
+        # Try to log to csv
 
         try:
             write_log_csv(timestamp, counter)
         except Exception:
             pass
+        
+        # Try to log to MQTT
 
         try:
             single(
-                topic=MQTT_TOPIC, payload=sensor_data, qos=2,
+                topic=MQTT_TOPIC, payload=sensor_data, qos=MQTT_QOS,
                 hostname=MQTT_HOST, port=MQTT_PORT,
                 auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
                 )
