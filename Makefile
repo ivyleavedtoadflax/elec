@@ -8,6 +8,9 @@ build:
 	--build-arg MQTT_PASSWORD=${MQTT_PASSWORD} \
 	--build-arg ELEC_INTERVAL=${ELEC_INTERVAL} \
 	--build-arg ELEC_LOG=${ELEC_LOG} \
+	--build-arg ECONOMY7=${ECONOMY7} \
+	--build-arg DAY_START=${DAY_START} \
+	--build-arg NIGHT_START=${NIGHT_START} \
 	-t elec:latest .
 
 build_new:
@@ -19,6 +22,9 @@ build_new:
 	--build-arg MQTT_PASSWORD=${MQTT_PASSWORD} \
 	--build-arg ELEC_INTERVAL=${ELEC_INTERVAL} \
 	--build-arg ELEC_LOG=${ELEC_LOG} \
+	--build-arg ECONOMY7=${ECONOMY7} \
+	--build-arg DAY_START=${DAY_START} \
+	--build-arg NIGHT_START=${NIGHT_START} \
 	--no-cache -t elec:latest .
 
 run:
@@ -34,7 +40,7 @@ test:
     sudo docker rm test
 
 clean:
-	-sudo docker stop $$(sudo docker ps -aq) || \
+	-sudo docker stop $$(sudo docker ps -aq) && \
 	sudo docker rm $$(sudo docker ps -aq)
 
 .PHONY: build build_new run test clean stop
