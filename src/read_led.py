@@ -38,6 +38,8 @@ ECONOMY7 = bool(os.environ.get('ECONOMY7'))
 DAY_START = strftime(os.environ.get('DAY_START'))
 NIGHT_START = strftime(os.environ.get('NIGHT_START'))
 PULSE_UNIT = float(os.environ.get('PULSE_UNIT'))
+DAY_RATE = float(os.environ.get('DAY_RATE'))
+NIGHT_RATE = float(os.environ.get('NIGHT_RATE'))
 
 # Print environment vars
 
@@ -54,6 +56,8 @@ print("ECONOMY7:", ECONOMY7)
 print("DAY_START:", DAY_START)
 print("NIGHT_START:", NIGHT_START)
 print("PULSE_UNIT:", PULSE_UNIT)
+print("DAY_RATE:", DAY_RATE)
+print("NIGHT_RATE:", NIGHT_RATE)
 
 # Define functions
 
@@ -126,38 +130,38 @@ def main(interval=ELEC_INTERVAL):
 
         # Initiliase accumulator at zero
         # Then run get_light and add to accumulator
-        
+
         counter = 0
         while timeout > time():
             counter += get_light(LDR_PIN)
 
         timestamp = strftime("%Y-%m-%d %H:%M:%S")
-        time = strftime("%H:%M")
-        NIGHT = 0
+        hour = strftime("%H:%M")
+        night = 0
 
         if ECONOMY7:
             if hour > NIGHT_START or hour < DAY_START:
-                NIGHT = 1
+                night = 1
 
-        RATE = ((NIGHT * NIGHT_RATE)) + ((1 - NIGHT) * DAY_RATE))
-        COST = counter * PULSE_UNIT * RATE
+        rate = ((night * NIGHT_RATE) + ((1 - night) * DAY_RATE))
+        cost = counter * PULSE_UNIT * rate
 
         sensor_data = {
             "Time" : timestamp,
             "Pulses" : counter,
-            "Night" : NIGHT
-            "Cost" : COST
+            "Night" : night,
+            "Cost" : cost
         }
 
         sensor_data = json.dumps(sensor_data)
-    
+
         # Try to log to csv
 
         try:
             write_log_csv(timestamp, counter)
         except Exception:
             pass
-        
+
         # Try to log to MQTT
 
         try:
