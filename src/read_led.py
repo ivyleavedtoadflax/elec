@@ -150,7 +150,7 @@ def main(interval=ELEC_INTERVAL):
 
         try:
             single(
-                topic=MQTT_TOPIC, payload=sensor_data, qos=1,
+                topic=MQTT_TOPIC, payload=sensor_data, qos=2,
                 hostname=MQTT_HOST, port=MQTT_PORT,
                 auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
                 )
