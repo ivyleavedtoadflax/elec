@@ -33,6 +33,9 @@ MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD')
 MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
 ELEC_LOG = os.environ.get('ELEC_LOG')
+ECONOMY7 = bool(os.environ.get('ECONOMY7'))
+DAY_START = int(os.environ.get('DAY_START'))
+NIGHT_START = int(os.environ.get('NIGHT_START'))
 
 # Print environment vars
 
@@ -40,10 +43,13 @@ print("*********** ENV VARS ***********")
 print("MQTT_HOST:", MQTT_HOST)
 print("MQTT_PORT:", MQTT_PORT)
 print("MQTT_USERNAME:", MQTT_USERNAME)
-print("MQTT_PASSWORD:", "*****", MQTT_PASSWORD[5:], sep='')
+print("MQTT_PASSWORD:", " *****", MQTT_PASSWORD[5:], sep="")
 print("MQTT_TOPIC:", MQTT_TOPIC)
 print("ELEC_INTERVAL:", ELEC_INTERVAL)
 print("ELEC_LOG:", ELEC_LOG)
+print("ECONOMY7:", ECONOMY7)
+print("DAY_START:", DAY_START)
+print("NIGHT_START:", NIGHT_START)
 
 # Define functions
 
@@ -121,10 +127,17 @@ def main(interval=ELEC_INTERVAL):
             counter += get_light(LDR_PIN)
 
         timestamp = strftime("%Y-%m-%d %H:%M:%S")
+        hour = int(strftime("%H"))
+        NIGHT = 0
+
+        if ECONOMY7:
+            if hour > NIGHT_START or hour < DAY_START:
+                NIGHT = 1
 
         sensor_data = {
             "Time" : timestamp,
-            "Pulses" : counter
+            "Pulses" : counter,
+            "Night" : NIGHT
         }
 
         sensor_data = json.dumps(sensor_data)
