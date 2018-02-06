@@ -37,6 +37,7 @@ ELEC_LOG = os.environ.get('ELEC_LOG')
 ECONOMY7 = bool(os.environ.get('ECONOMY7'))
 DAY_START = strftime(os.environ.get('DAY_START'))
 NIGHT_START = strftime(os.environ.get('NIGHT_START'))
+PULSE_UNIT = float(os.environ.get('PULSE_UNIT'))
 
 # Print environment vars
 
@@ -52,6 +53,7 @@ print("ELEC_LOG:", ELEC_LOG)
 print("ECONOMY7:", ECONOMY7)
 print("DAY_START:", DAY_START)
 print("NIGHT_START:", NIGHT_START)
+print("PULSE_UNIT:", PULSE_UNIT)
 
 # Define functions
 
@@ -137,10 +139,14 @@ def main(interval=ELEC_INTERVAL):
             if hour > NIGHT_START or hour < DAY_START:
                 NIGHT = 1
 
+        RATE = ((NIGHT * NIGHT_RATE)) + ((1 - NIGHT) * DAY_RATE))
+        COST = counter * PULSE_UNIT * RATE
+
         sensor_data = {
             "Time" : timestamp,
             "Pulses" : counter,
             "Night" : NIGHT
+            "Cost" : COST
         }
 
         sensor_data = json.dumps(sensor_data)
