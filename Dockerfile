@@ -51,7 +51,7 @@ ENV ECONOMY7 $ECONOMY7
 ENV DAY_START $DAY_START
 ENV NIGHT_START $NIGHT_START
 
-`# Run read_led.py at launch
+# Run read_led.py at launch
 
 ENTRYPOINT ["python3"]
 
