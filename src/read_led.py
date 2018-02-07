@@ -145,6 +145,7 @@ def main(interval=ELEC_INTERVAL):
 
         rate = ((night * NIGHT_RATE) + ((1 - night) * DAY_RATE))
         cost = counter * PULSE_UNIT * rate
+        cost = round(cost, 5)
 
         sensor_data = {
             "Time" : timestamp,
