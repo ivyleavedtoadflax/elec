@@ -160,7 +160,9 @@ def main(interval=ELEC_INTERVAL):
 
         try:
             write_log_csv(timestamp, counter)
-        except Exception:
+        except Exception as e:
+            print("Failed to log data to csv file")
+            print(e)
             pass
 
         # Try to log to MQTT
@@ -172,8 +174,10 @@ def main(interval=ELEC_INTERVAL):
                 auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
                 )
 
-        except Exception:
+        except Exception as e:
             print('Failed to send message to MQTT broker')
+            print(e)
+            pass
 
 if __name__ == '__main__':
     main()
