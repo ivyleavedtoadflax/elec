@@ -1,12 +1,12 @@
+#!/usr/bin/env python3
+
 '''
 Read a blinking LED and log
 '''
 
-#!/usr/bin/env python
 
 import os
 from time import strftime, sleep, time
-from sendelec import sendElec, on_connect, on_publish
 import paho.mqtt.client as mqtt
 from paho.mqtt.publish import single
 
@@ -15,6 +15,7 @@ MQTT_PORT = int(os.environ.get('MQTT_PORT'))
 MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
 MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD')
 MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
+MQTT_QOS = int(os.environ.get('MQTT_QOS'))
 
 # Define callbacks
 
@@ -43,7 +44,7 @@ client.loop_stop()
 client.disconnect
 
 single(
-    topic=MQTT_TOPIC, payload="Testing", qos=1,
-    hostname=MQTT_HOSTNAME, port=MQTT_PORT,
+    topic=MQTT_TOPIC, payload="Testing", qos=MQTT_QOS,
+    hostname=MQTT_HOST, port=MQTT_PORT,
     auth={'username':MQTT_USERNAME, 'password':MQTT_PASSWORD}
     )
