@@ -31,6 +31,7 @@ MQTT_PORT = int(os.environ.get('MQTT_PORT'))
 MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
 MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD')
 MQTT_TOPIC = os.environ.get('MQTT_TOPIC')
+MQTT_QOS = int(os.environ.get('MQTT_QOS'))
 ELEC_INTERVAL = int(os.environ.get('ELEC_INTERVAL'))
 ELEC_LOG = os.environ.get('ELEC_LOG')
 ECONOMY7 = bool(os.environ.get('ECONOMY7'))
@@ -48,6 +49,7 @@ print("MQTT_PORT:", MQTT_PORT)
 print("MQTT_USERNAME:", MQTT_USERNAME)
 print("MQTT_PASSWORD:", " *****", MQTT_PASSWORD[5:], sep="")
 print("MQTT_TOPIC:", MQTT_TOPIC)
+print("MQTT_QOS:", MQTT_QOS)
 print("ELEC_INTERVAL:", ELEC_INTERVAL)
 print("ELEC_LOG:", ELEC_LOG)
 print("ECONOMY7:", ECONOMY7)
@@ -164,7 +166,7 @@ def main(interval=ELEC_INTERVAL):
 
         try:
             single(
-                topic=MQTT_TOPIC, payload=sensor_data, qos=1,
+                topic=MQTT_TOPIC, payload=sensor_data, qos=MQTT_QOS,
                 hostname=MQTT_HOST, port=MQTT_PORT,
                 auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
                 )
