@@ -2,3 +2,6 @@ access_token.py
 server_cred.py
 .envrc
 __pycache__
+*.key
+*.crt
+*.pem
