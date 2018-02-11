@@ -27,10 +27,10 @@ RUN pip3 install -r requirements.txt
 # Set environment variables: these will be passed into the container
 # and must be populated at runtime with --env-file or -e
 
-ENV MQTT_HOST
-ENV MQTT_PORT
+ENV MQTT_HOST 192.168.1.177
+ENV MQTT_PORT 1883
 ENV MQTT_USERNAME mosquitto
-ENV MQTT_PASSWORD
+ENV MQTT_PASSWORD ''
 ENV MQTT_TOPIC $MQTT_TOPIC
 ENV MQTT_QOS 1
 ENV ELEC_INTERVAL 30
