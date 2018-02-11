@@ -13,26 +13,24 @@ Installing Docker on the Raspberry Pi is very simple, simply run:
 
 ## Building the docker container
 
-The following environment variables should first be set on the raspberry pi before building the container:
+The following environment variables must be set in an env file and passed at runtime with `--env-file` (an example is incldue din the repo).
 
 |Variable|Definition|
 |---|---|
-|ELEC_LOG|File path for pulse data log file|
-|ELEC_INTERVAL|Interval over which electricity measurements are taken|
 |MQTT_HOST|MQTT broker hostname|
 |MQTT_PORT|MQTT broker port|
 |MQTT_USERNAME|MQTT account username|
 |MQTT_PASSWORD|MQTT account password|
 |MQTT_TOPIC|MQTT topic on which to publish|
-
-It's a good idea to install direnv to handle your environment variables before building (otherwise you can store the env vars in ~/.profile). Install direnv with:
-
-```{bash}
-sudo apt-get install direnv
-echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
-```
-
-The image can then be built with `make build_new`.
+|MQTT_QOS|MQTT quality of service level|
+|ELEC_INTERVAL|Interval over which electricity measurements are taken|
+|ELEC_LOG|File path for pulse data log file|
+|ECONOMY7|Does the electricity meter use economy seven or split metering? {0,1}|
+|DAY_START|What time does the day rate start? (HH:MM)|
+|NIGHT_START|Does the does the night rate start? (HH:MM)|
+|DAY_RATE|What is the cost of a unit during the day?|
+|NIGHT_RATE|What is the cost of a unit during the night?|
+|PULSE_RATE|What does one led pulse signify in units of kWh?|
 
 ## Restarting the container at startup
 
