@@ -2,9 +2,9 @@ FROM resin/rpi-raspbian:latest
 
 # Note that this container can only be built on ARM architecture!
 
-MAINTAINER Matthew Upson
-LABEL date="2018-02-03"
-LABEL version="2.0.0"
+LABEL maintainer="Matthew Upson"
+LABEL date="2018-04-17"
+LABEL version="2.3.0"
 LABEL description="Measure electricity usage with a raspberry pi"
 
 # Prepare for using gpio
