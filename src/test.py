@@ -25,19 +25,16 @@ def main(WAIT):
     total = 0
     while True:
         input_value = GPIO.input(17)
+        sleep(WAIT)
         if input_value == 0:
             counter += 1
-            print("======================== PULSE " + str(counter))
+            print("======================== PULSE " + str(total))
             total += 1
-	    #return(total)
-            pulse = open("/home/pi/elec/pulse.dat", "w")
+            pulse = open("/data/test.dat", "w")
             pulse.write(strftime("%H:%M:%S") + "," + str(1))
             pulse.close()
         else:
             counter = 0
-	    #print "-"
-	    #print "Input Value (PIN 17):", input_value
-        sleep(WAIT)
 
 if __name__ == '__main__':
     main(WAIT)
