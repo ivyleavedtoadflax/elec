@@ -115,6 +115,43 @@ def write_log_csv(timestamp, value, log_file=ELEC_LOG):
     log.write("\n" + str(timestamp) + "," + str(value))
     log.close()
 
+def write_json_log(timestamp, data, log_file=ELEC_LOG):
+    '''
+    Write log data to csv
+
+    :param timestamp: <str> Timestamp
+    :param value: <int> Value (count of flashes)
+    :param log_file: <str> Location of log file
+    '''
+
+    try:
+        with open(log_file, "a") as f:
+            json.dump(data, f)
+            f.write("\n")
+    except Exception as e:
+        print("Failed to log data to ", + "log_file")
+        print(e)
+        pass
+
+def send_mqtt(data, mqtt_topic=MQTT_TOPIC, mqtt_qos=MQTT_QOS, 
+              mqtt_host=MQTT_HOST, mqtt_port=MQTT_PORT, mqtt_username=MQTT_USERNAME, 
+              mqtt_password=MQTT_PASSWORD):
+    '''
+    Send a single mqtt message
+    '''
+
+    try:
+        single(
+            topic=mqtt_topic, payload=data, qos=mqtt_qos,
+            hostname=mqtt_host, port=mqtt_port,
+            auth={'username': mqtt_username, 'password': mqtt_password}
+            )
+
+    except Exception as e:
+        print('Failed to send message to MQTT broker')
+        print(e)
+        pass
+
 def main(interval=ELEC_INTERVAL):
 
     '''
@@ -154,30 +191,17 @@ def main(interval=ELEC_INTERVAL):
             "Cost" : cost
         }
 
-        sensor_data = json.dumps(sensor_data)
+        # Try to log to json
 
-        # Try to log to csv
-
-        try:
-            write_log_csv(timestamp, counter)
-        except Exception as e:
-            print("Failed to log data to csv file")
-            print(e)
-            pass
+        write_json_log(timestamp, sensor_data)
 
         # Try to log to MQTT
 
-        try:
-            single(
-                topic=MQTT_TOPIC, payload=sensor_data, qos=MQTT_QOS,
-                hostname=MQTT_HOST, port=MQTT_PORT,
-                auth={'username': MQTT_USERNAME, 'password': MQTT_PASSWORD}
-                )
+        mqtt_data = json.dumps(sensor_data)
 
-        except Exception as e:
-            print('Failed to send message to MQTT broker')
-            print(e)
-            pass
+        send_mqtt(mqtt_data, mqtt_topic=MQTT_TOPIC, mqtt_qos=MQTT_QOS, 
+              mqtt_host=MQTT_HOST, mqtt_port=MQTT_PORT, mqtt_username=MQTT_USERNAME, 
+              mqtt_password=MQTT_PASSWORD)
 
 if __name__ == '__main__':
     main()
