@@ -27,20 +27,20 @@ RUN pip3 install -r requirements.txt
 # Set environment variables: these will be passed into the container
 # and must be populated at runtime with --env-file or -e
 
-ENV MQTT_HOST 192.168.1.177
+ENV MQTT_HOST 192.168.1.14
 ENV MQTT_PORT 1883
 ENV MQTT_USERNAME mosquitto
 ENV MQTT_PASSWORD ''
-ENV MQTT_TOPIC $MQTT_TOPIC
+ENV MQTT_TOPIC tele/electricity/
 ENV MQTT_QOS 1
 ENV ELEC_INTERVAL 30
-ENV ELEC_LOG /data/elec_log.csv
+ENV ELEC_LOG /data/elec_log.json
 ENV ECONOMY7 0
 ENV DAY_START 07:30
 ENV NIGHT_START 22:30
-ENV DAY_RATE 0.05
-ENV NIGHT_RATE 0.12
-ENV PULSE_UNIT 0.001
+ENV DAY_RATE 0.15158
+ENV NIGHT_RATE 0.15158
+ENV PULSE_UNIT 0.00025
 
 # Run read_led.py at launch
 
