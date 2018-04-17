@@ -13,11 +13,14 @@ run:
 	--env-file .env \
         -td elec:latest
 
+clean_test:
+	-sudo docker stop test
+	-sudo docker rm test
+
 test:
 	sudo docker run -v /data:/data \
-        --name test -t elec:latest \
-        -c 'print("****** Hello World! ******")' && \
-    	sudo docker rm test
+        --privileged --name test \
+	-it elec:latest test.py 0.01
 
 clean:
 	-sudo docker stop $$(sudo docker ps -aq) && \
