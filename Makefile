@@ -16,8 +16,9 @@ telegraf:
 	sudo docker run \
 	-d --restart unless-stopped \
 	-v $(PWD)/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
+	-v /data:/data:ro \
 	--name telegraf \
-	-it telegraf:latest
+	-it bradsjm/rpi-telegraf:latest
 
 elec: Dockerfile src/read_led.py src/requirements.txt
 	sudo -E docker build -t elec:latest .
