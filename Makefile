@@ -1,6 +1,6 @@
 PWD = $(shell pwd)
 
-all: clean telegraf.conf elec run telegraf
+all: build telegraf.conf clean telegraf elec
 
 telegraf.conf: telegraf.template.conf .envrc Makefile
 	echo "Creating telegraf.conf file"; \
@@ -12,7 +12,7 @@ telegraf.conf: telegraf.template.conf .envrc Makefile
 	-e "s%\$${ELEC_LOG}%$(ELEC_LOG)%" \
 	telegraf.template.conf > telegraf.conf
 
-telegraf:
+telegraf: telegraf.conf
 	sudo docker run \
 	-d --restart unless-stopped \
 	-v $(PWD)/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
@@ -20,30 +20,33 @@ telegraf:
 	--name telegraf \
 	-it bradsjm/rpi-telegraf:latest
 
-elec: Dockerfile src/read_led.py src/requirements.txt
+build: Dockerfile src/read_led.py src/requirements.txt
 	sudo -E docker build -t elec:latest .
 
-elec_new: Dockerfile src/read_led.py src/requirements.txt
+build_new: Dockerfile src/read_led.py src/requirements.txt
 	sudo -E docker build --no-cache -t elec:latest .
 
-run:
+elec:
 	sudo docker run -v /data:/data \
         --privileged --name elec \
         --restart unless-stopped \
 	--env-file .env \
         -td elec:latest
 
-test:
+elec_test:
+	-sudo docker stop test
+	-sudo docker rm test
 	sudo docker run -v /data:/data \
-        --name test -t elec:latest \
-        -c 'print("****** Hello World! ******")' && \
-    	sudo docker rm test
+        --privileged --name test \
+	-it elec:latest test.py
 
 clean:
-	-sudo docker stop $$(sudo docker ps -aq) && \
-	sudo docker rm $$(sudo docker ps -aq)
+	-sudo docker stop elec
+	-sudo docker rm elec
+	-sudo docker stop telegraf
+	-sudo docker rm telegraf
 
 help:
 	@cat Makefile
 
-.PHONY: build build_new run test clean help
+.PHONY: telegraf build build_new run elec elec_test clean help
