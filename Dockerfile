@@ -3,8 +3,8 @@ FROM resin/rpi-raspbian:latest
 # Note that this container can only be built on ARM architecture!
 
 LABEL maintainer="Matthew Upson"
-LABEL date="2018-04-17"
-LABEL version="2.3.0"
+LABEL date="2018-04-19"
+LABEL version="2.3.2"
 LABEL description="Measure electricity usage with a raspberry pi"
 
 # Prepare for using gpio
@@ -27,6 +27,7 @@ RUN pip3 install -r requirements.txt
 # Set environment variables: these will be passed into the container
 # and must be populated at runtime with --env-file or -e
 
+ENV MQTT 0
 ENV MQTT_HOST 192.168.1.14
 ENV MQTT_PORT 1883
 ENV MQTT_USERNAME mosquitto
