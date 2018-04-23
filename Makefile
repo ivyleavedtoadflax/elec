@@ -33,12 +33,14 @@ elec:
 	--env-file .env \
         -td elec:latest
 
-elec_test:
+clean_test:
 	-sudo docker stop test
 	-sudo docker rm test
+
+test:
 	sudo docker run -v /data:/data \
         --privileged --name test \
-	-it elec:latest test.py
+	-it elec:latest test.py 0.01
 
 clean:
 	-sudo docker stop elec

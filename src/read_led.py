@@ -86,26 +86,6 @@ def get_light(ldr_pin, duration=DURATION):
         output = 0
     return output
 
-# Run data recording LED init sequence
-# This is not currently used in this version
-
-def led_flash(led_pin, n_flashes=2, interval=0.3):
-    '''
-    Flash an indicator LED
-
-    :param LED_PIN: <int> Address of pin connected to LED
-    :param n_flashes: <int> number of times to flash LED
-    :param interval: <int> Interval between flashes (in seconds)
-    '''
-
-    count = 0
-    while count < n_flashes:
-        GPIO.output(led_pin, GPIO.HIGH)
-        sleep(interval)
-        GPIO.output(led_pin, GPIO.LOW)
-        sleep(interval)
-        count += 1
-
 def write_log_csv(timestamp, value, log_file=ELEC_LOG):
     '''
     Write log data to csv
@@ -174,7 +154,7 @@ def main(interval=ELEC_INTERVAL):
 
         counter = 0
         while timeout > time():
-            counter += get_light(LDR_PIN)
+            counter += get_light(LDR_PIN, duration=DURATION)
 
         timestamp = strftime("%Y-%m-%d %H:%M:%S")
         hour = strftime("%H:%M")

@@ -3,8 +3,8 @@ FROM resin/rpi-raspbian:latest
 # Note that this container can only be built on ARM architecture!
 
 LABEL maintainer="Matthew Upson"
-LABEL date="2018-04-19"
-LABEL version="2.3.2"
+LABEL date="2018-04-23"
+LABEL version="2.5.0"
 LABEL description="Measure electricity usage with a raspberry pi"
 
 # Prepare for using gpio
@@ -42,7 +42,7 @@ ENV NIGHT_START 22:30
 ENV DAY_RATE 0.15158
 ENV NIGHT_RATE 0.15158
 ENV PULSE_UNIT 0.00025
-ENV DURATION 0.001
+ENV DURATION 0.005
 
 # Run read_led.py at launch
 

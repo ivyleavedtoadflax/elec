@@ -15,8 +15,7 @@ counter = 0
 def eventbla():
 	print("PULSE")
 
-GPIO.add_event_detect(17, GPIO.FALLING)
-GPIO.add_event_callback(17,eventbla)
+GPIO.add_event_detect(17,callback=eventbla, bouncetime=100)
 GPIO.cleanup()
 
 

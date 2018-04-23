@@ -32,6 +32,7 @@ The following environment variables must be set in an env file and passed at run
 |DAY_RATE|What is the cost of a unit during the day?|
 |NIGHT_RATE|What is the cost of a unit during the night?|
 |PULSE_RATE|What does one led pulse signify in units of kWh?|
+|DURATION|Duration of a small sleep after recording an LED pulse (should be a small number, e.g. - 0.005)|
 
 ## Restarting the container at startup
 
@@ -62,18 +63,10 @@ Rasbpi setup
 
 ## Some testing
 
-I was skeptical that using an LDR (which can be quite slow) would be quick enough to detect flashes over a fraction of a second, so I tested this using the file [test_led.py](test_led.py).
-By setting the pi to execute a number of blinks, with random intervals, and counting them back using the pulse counter, I found the LDR to have perfect accuracy over a range of conditions (which sadly I did not record at the time!).
+Tests can be run in the docker container with:
 
-Two test scripts are included, both of which are launched from the command line.
+```
+make test
+```
 
-The first [test.py](test.py) can be launched with `sudo python test.py` with an optional argument of the sleep time between measurements (if not specified, this defaults to 0.03 seconds).
-The second file [test_led.py](test_led.py) can be used in conjunction with test.py, by directing the LDR at the indicator LED on the breadboard.
-test_led.py takes three arguments e.g.: `sudo python test_led.py 10 0.1 10`. These are:
-
-* Number of flashes
-* Duration of flash in seconds
-* Maximum interval from which a random number will be selected
-
-By adjusting these arguments, you can simulate the kind of flashes that you would receive from your meter, and test whether you are receiving them properly using the [test.py](test.py) script.
-
+This test script can be used to verify that the circuit is correctly capturing LED pulses.
