@@ -41,6 +41,7 @@ NIGHT_START = strftime(os.environ.get('NIGHT_START'))
 PULSE_UNIT = float(os.environ.get('PULSE_UNIT'))
 DAY_RATE = float(os.environ.get('DAY_RATE'))
 NIGHT_RATE = float(os.environ.get('NIGHT_RATE'))
+DURATION = float(os.environ.get('DURATION'))
 
 # Print environment vars
 
@@ -60,10 +61,11 @@ print("NIGHT_START:", NIGHT_START)
 print("PULSE_UNIT:", PULSE_UNIT)
 print("DAY_RATE:", DAY_RATE)
 print("NIGHT_RATE:", NIGHT_RATE)
+print("DURATION:", DURATION)
 
 # Define functions
 
-def get_light(ldr_pin, duration=0.03):
+def get_light(ldr_pin, duration=DURATION):
     '''
     Read from the GPIO pin then sleep
 
@@ -185,13 +187,23 @@ def main(interval=ELEC_INTERVAL):
         rate = ((night * NIGHT_RATE) + ((1 - night) * DAY_RATE))
         cost = counter * PULSE_UNIT * rate
         cost = round(cost, 5)
+        
+        if ECONOMY7:
 
-        sensor_data = {
-            "Time" : timestamp,
-            "Pulses" : counter,
-            "Night" : night,
-            "Cost" : cost
-        }
+            sensor_data = {
+                "Time" : timestamp,
+                "Pulses" : counter,
+                "Night" : night,
+                "Cost" : cost
+            }
+
+        else:
+
+            sensor_data = {
+                "Time" : timestamp,
+                "Pulses" : counter
+            }
+            
 
         # Try to log to json
 
