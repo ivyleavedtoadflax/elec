@@ -1,6 +1,7 @@
 PWD = $(shell pwd)
+LOG_SIZE=10m
 
-all: build telegraf.conf clean telegraf elec
+all: telegraf.conf telegraf elec
 
 telegraf.conf: telegraf.template.conf .envrc Makefile
 	echo "Creating telegraf.conf file"; \
@@ -14,6 +15,7 @@ telegraf.conf: telegraf.template.conf .envrc Makefile
 
 telegraf: telegraf.conf
 	sudo docker run \
+	--log-opt max-size=${LOG_SIZE} \
 	-d --restart unless-stopped \
 	-v $(PWD)/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
 	-v /data:/data:ro \
@@ -28,6 +30,7 @@ build_new: Dockerfile src/read_led.py src/requirements.txt
 
 elec:
 	sudo docker run -v /data:/data \
+	--log-opt max-size=${LOG_SIZE} \
         --privileged --name elec \
         --restart unless-stopped \
 	--env-file .env \
