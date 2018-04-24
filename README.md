@@ -17,6 +17,7 @@ The following environment variables must be set in an env file and passed at run
 
 |Variable|Definition|
 |---|---|
+|MQTT|Enable publishing to MQTT using following info|
 |MQTT_HOST|MQTT broker hostname|
 |MQTT_PORT|MQTT broker port|
 |MQTT_USERNAME|MQTT account username|

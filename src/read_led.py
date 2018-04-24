@@ -26,6 +26,7 @@ GPIO.setup(LDR_PIN, GPIO.IN)
 
 # Get MQTT server credentials from environment vars
 
+MQTT = int(os.environ.get('MQTT'))
 MQTT_HOST = os.environ.get('MQTT_HOST')
 MQTT_PORT = int(os.environ.get('MQTT_PORT'))
 MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
@@ -45,6 +46,7 @@ DURATION = float(os.environ.get('DURATION'))
 # Print environment vars
 
 print("*********** ENV VARS ***********")
+print("MQTT:", MQTT)
 print("MQTT_HOST:", MQTT_HOST)
 print("MQTT_PORT:", MQTT_PORT)
 print("MQTT_USERNAME:", MQTT_USERNAME)
@@ -165,13 +167,23 @@ def main(interval=ELEC_INTERVAL):
         rate = ((night * NIGHT_RATE) + ((1 - night) * DAY_RATE))
         cost = counter * PULSE_UNIT * rate
         cost = round(cost, 5)
+        
+        if ECONOMY7:
 
-        sensor_data = {
-            "Time" : timestamp,
-            "Pulses" : counter,
-            "Night" : night,
-            "Cost" : cost
-        }
+            sensor_data = {
+                "Time" : timestamp,
+                "Pulses" : counter,
+                "Night" : night,
+                "Cost" : cost
+            }
+
+        else:
+
+            sensor_data = {
+                "Time" : timestamp,
+                "Pulses" : counter
+            }
+            
 
         # Try to log to json
 
@@ -179,11 +191,13 @@ def main(interval=ELEC_INTERVAL):
 
         # Try to log to MQTT
 
-        mqtt_data = json.dumps(sensor_data)
+        if MQTT:
 
-        send_mqtt(mqtt_data, mqtt_topic=MQTT_TOPIC, mqtt_qos=MQTT_QOS, 
-              mqtt_host=MQTT_HOST, mqtt_port=MQTT_PORT, mqtt_username=MQTT_USERNAME, 
-              mqtt_password=MQTT_PASSWORD)
+            mqtt_data = json.dumps(sensor_data)
+
+            send_mqtt(mqtt_data, mqtt_topic=MQTT_TOPIC, mqtt_qos=MQTT_QOS, 
+                      mqtt_host=MQTT_HOST, mqtt_port=MQTT_PORT, 
+                      mqtt_username=MQTT_USERNAME, mqtt_password=MQTT_PASSWORD)
 
 if __name__ == '__main__':
     main()
